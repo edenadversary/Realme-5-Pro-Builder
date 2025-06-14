@@ -69,14 +69,14 @@ make -j$(nproc --all) $(echo $BUILD_FLAGS) Image.gz-dtb
 
 if [ -f "out/arch/arm64/boot/Image.gz-dtb" ]; then
 echo -e "\nKernel compiled succesfully! Zipping up...\n"
-git clone -q https://github.com/osm0sis/AnyKernel3 --single-branch
-cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3
-cd AnyKernel3
+git clone -q https://github.com/edenadversary/AnyKernel3-eden --single-branch
+cp out/arch/arm64/boot/Image.gz-dtb AnyKernel3-eden
+cd AnyKernel3-eden
 sed -i "s/BLOCK=.*/BLOCK=\/dev\/block\/bootdevice\/by-name\/boot;/" "anykernel.sh"
 zip -r9 "../$ZIPNAME" * -x '*.git*' README.md *placeholder
 cd ..
 if [ "$DO_CLEAN" = "true" ]; then 
-rm -rf AnyKernel3 out/arch/arm64/boot
+rm -rf AnyKernel3-eden out/arch/arm64/boot
 fi
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo "Zip: $ZIPNAME"
