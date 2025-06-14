@@ -1,7 +1,7 @@
 export PATH="$HOME/clang/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
-ZIPNAME="PUKIMAK_LAE-$(date '+%Y%m%d-%H%M').zip"
+ZIPNAME="GodspeedKernel-SUKISU_SUSFS_RUI2-$(date '+%Y%m%d-%H%M').zip"
 
 [ $USE_PERSONAL_DEFCONFIG = "true" ] && DEFCONFIG="sdm670-perf_defconfig"
 
