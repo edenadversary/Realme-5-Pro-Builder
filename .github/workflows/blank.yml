@@ -1,0 +1,102 @@
+name: Build Kernel
+on:
+  workflow_dispatch:
+    inputs:
+      REPO:
+        description: Kernel Repo
+        default: 'edenadversary/rmx1971_kernel_realme'
+        required: true
+      BRANCH:
+        description: Kernel branch
+        default: 'r5p-test'
+        required: true
+      KSU:
+        description: Add KernelSU support
+        type: boolean
+      KSU_BRANCH:
+        description: KernelSU branch
+        default: 'susfs-main'
+        required: true
+      USE_PERSONAL:
+        description: Use Personal defconfig
+        type: boolean
+        default: 'true'
+        
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: secureEnvironment
+    steps:
+    - name: Get date
+      id: rundate
+      run: sudo rm /etc/localtime && sudo ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && echo "REPO_DATE=`date`" >> $GITHUB_OUTPUT
+    
+    - uses: actions/checkout@v4
+      with:
+        path: kernel_root
+        repository: ${{ github.event.inputs.REPO }}
+        ref: ${{ github.event.inputs.BRANCH }}
+        show-progress: false
+        fetch-depth: 1
+
+    - name: Prepare dependencies
+      run: |
+        sudo apt update -y
+        sudo apt install bc cpio flex bison aptitude git python-is-python3 tar perl wget aria2 curl lz4 -y
+        sudo aptitude install libssl-dev -y
+
+    - name: Regen defconfig
+      id: buildKernel
+      run: |
+        export IS_CI=true
+        git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo -b r5p-test
+        mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/sdm670-perf_defconfig ./arch/arm64/configs/
+        gitsha1=$(git rev-parse --short HEAD)
+        buildDetails="`make kernelversion`-pukimak_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
+      working-directory: kernel_root
+
+    - name: Build kernel
+      run: |
+        if [[ "${{ github.event.inputs.USE_PERSONAL }}" = "true" ]]; then
+          export USE_PERSONAL_DEFCONFIG=true
+        else
+          export USE_PERSONAL_DEFCONFIG=false
+        fi
+        if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+        fi
+        bash ./build.sh
+        if [ -e $(pwd)/out/.config ]; then
+          mv out/.config out/defconfig
+        fi
+        if [ -e $(pwd)/out/arch/arm64/boot/Image ]; then
+          rm $(pwd)/out/arch/arm64/boot/Image
+        fi
+      working-directory: kernel_root
+
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Build-${{ steps.buildKernel.outputs.buildDetails }}
+        path: kernel_root/out/arch/arm64/boot/*
+        compression-level: 9
+
+    - name: Upload AnyKernel3
+      uses: actions/upload-artifact@v4
+      with:
+        name: AnyKernel3-${{ steps.buildKernel.outputs.buildDetails }}
+        path: kernel_root/AnyKernel3/*
+        compression-level: 9
+
+    - name: Upload configs complete
+      continue-on-error: true
+      uses: actions/upload-artifact@v4
+      with:
+        name: Defconfig-${{ steps.buildKernel.outputs.buildDetails }}
+        path: kernel_root/out/defconfig
+
+    - name: Cleanup useless files
+      continue-on-error: true
+      run: |
+        rm out/vmlinux.o out/vmlinux out/System.map
+      working-directory: kernel_root
