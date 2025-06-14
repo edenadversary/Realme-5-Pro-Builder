@@ -52,7 +52,7 @@ jobs:
         git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo --single-branch
         mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/sdm670-perf_defconfig ./arch/arm64/configs/
         gitsha1=$(git rev-parse --short HEAD)
-        buildDetails="`make kernelversion`-Godspeed_SUKISU-SUSFS-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
+        buildDetails="`make kernelversion`-Godspeed_SUKISU-SUSFS_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
     - name: Build kernel
