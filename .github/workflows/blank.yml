@@ -81,11 +81,11 @@ jobs:
         path: kernel_root/out/arch/arm64/boot/*
         compression-level: 9
 
-    - name: Upload AnyKernel3
+    - name: Upload AnyKernel3-eden
       uses: actions/upload-artifact@v4
       with:
-        name: AnyKernel3-${{ steps.buildKernel.outputs.buildDetails }}
-        path: kernel_root/AnyKernel3/*
+        name: AnyKernel3-eden${{ steps.buildKernel.outputs.buildDetails }}
+        path: kernel_root/AnyKernel3-eden/*
         compression-level: 9
 
     - name: Upload configs complete
