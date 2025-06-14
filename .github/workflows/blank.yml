@@ -49,7 +49,7 @@ jobs:
       id: buildKernel
       run: |
         export IS_CI=true
-        git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo -b r5p-test
+        git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo --single-branch
         mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/sdm670-perf_defconfig ./arch/arm64/configs/
         gitsha1=$(git rev-parse --short HEAD)
         buildDetails="`make kernelversion`-pukimak_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
