@@ -19,7 +19,6 @@ on:
           - "None"
           - "SukiSU Ultra + SUSFS"
           - "KernelSU-Next + Next-SuSFS"
-          - "KernelSU by @rsuntk"
           - "Rissu KernelSU + SUSFS"
       KSU_BRANCH:
         description: KernelSU branch
@@ -27,8 +26,11 @@ on:
         required: true
       USE_PERSONAL:
         description: Use Personal defconfig
-        type: boolean
-        default: 'true'
+        type: choice
+        required: true
+        options:
+              - "godspeed_suki_defconfig"
+              - "godspeed_defconfig"
         
 jobs:
   build:
@@ -58,12 +60,12 @@ jobs:
       run: |
         export IS_CI=true
         git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo --single-branch
-        mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/godspeed_defconfig ./arch/arm64/configs/
+        mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/${{ github.event.inputs.USE_PERSONAL }} ./arch/arm64/configs/
         gitsha1=$(git rev-parse --short HEAD)
         buildDetails="`make kernelversion`-Godspeed-RMX1971_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
-    - name: "🔍 KernelSU check"
+    - name: "KernelSU check"
       working-directory: kernel_root
       run: |
           if [ "${{ github.event.inputs.KSU_OPT }}" == "None" ]; then
@@ -71,8 +73,22 @@ jobs:
           else
             echo "KSU Build"
           fi
+          
+    - name: "Update RKSU + SUSFS"
+      working-directory: kernel_root
+      if: ${{ github.event.inputs.KSU_OPT == 'RKSU + SUSFS' }}
+      run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
 
-    - name: "😋 Update KernelSU-Next + SUSFS"
+          curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+
+
+    - name: "Update KernelSU-Next + SUSFS"
       working-directory: kernel_root
       if: ${{ github.event.inputs.KSU_OPT == 'KernelSU-Next + SUSFS' }}
       run: |
