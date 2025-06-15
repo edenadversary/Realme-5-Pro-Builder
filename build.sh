@@ -1,5 +1,4 @@
 export PATH="$HOME/clang/bin:$PATH"
-export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
 ZIPNAME="GodspeedKernel-SUKISU_SUSFS_RUI2-$(date '+%Y%m%d-%H%M').zip"
 
@@ -12,7 +11,7 @@ fi
 
 if ! [ -d "$HOME/zyc-clang" ]; then
 echo "- Toolchains not found! Fetching..."
-aria2c https://github.com/ZyCromerZ/Clang/releases/download/13.0.1-20230207-release/Clang-13.0.1-20230207.tar.gz
+aria2c https://github.com/kdrag0n/proton-clang/archive/refs/tags/20210522.tar.gz
 mkdir ~/clang
 tar -xf *.tar.gz -C ~/clang
 [ ! -d "$HOME/androidcc-4.9" ] && curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s androidcc-4.9
