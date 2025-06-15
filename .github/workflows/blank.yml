@@ -13,6 +13,18 @@ on:
       KSU:
         description: Add KernelSU support
         type: boolean
+      KSU_OPT:
+        description: "Choose KernelSU version"
+        required: true
+        default: "KernelSU"
+        type: choice
+        options:
+          - "None"
+          - "KernelSU"
+          - "KernelSU-Next"
+          - "KernelSU-Next + Next-SuSFS"
+          - "KernelSU by @rsuntk"
+          - "SukiSU Ultra + SUSFS"
       KSU_BRANCH:
         description: KernelSU branch
         default: 'susfs-main'
@@ -55,15 +67,25 @@ jobs:
         buildDetails="`make kernelversion`-Godspeed_SUKISU-SUSFS_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
+      - name: "😋 Update SukiSU Ultra + SUSFS"
+        working-directory: kernel_root
+        if: ${{ github.event.inputs.kernelSUChoice == 'SukiSU Ultra + SUSFS' }}
+        run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
+
     - name: Build kernel
       run: |
         if [[ "${{ github.event.inputs.USE_PERSONAL }}" = "true" ]]; then
           export USE_PERSONAL_DEFCONFIG=true
         else
           export USE_PERSONAL_DEFCONFIG=false
-        fi
-        if [[ "${{ github.event.inputs.KSU }}" = "true" ]]; then
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
         fi
         bash ./build.sh
         if [ -e $(pwd)/out/.config ]; then
