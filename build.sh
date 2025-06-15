@@ -1,4 +1,5 @@
 export PATH="$HOME/clang/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
 ZIPNAME="GodspeedKernel-SUKISU_SUSFS_RUI2-$(date '+%Y%m%d-%H%M').zip"
 
