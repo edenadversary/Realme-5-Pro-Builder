@@ -10,9 +10,6 @@ on:
         description: Kernel branch
         default: 'r5p-test'
         required: true
-      KSU:
-        description: Add KernelSU support
-        type: boolean
       KSU_OPT:
         description: "Choose KernelSU version"
         required: true
@@ -20,8 +17,7 @@ on:
         type: choice
         options:
           - "None"
-          - "KernelSU"
-          - "KernelSU-Next"
+          - "SukiSU Ultra + SUSFS"
           - "KernelSU-Next + Next-SuSFS"
           - "KernelSU by @rsuntk"
           - "Rissu KernelSU + SUSFS"
@@ -67,6 +63,28 @@ jobs:
         buildDetails="`make kernelversion`-Godspeed-RMX1971_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
+    - name: "🔍 KernelSU check"
+      working-directory: kernel_root
+      run: |
+          if [ "${{ github.event.inputs.KSU_OPT }}" == "None" ]; then
+            echo "Non-KSU Build"
+          else
+            echo "KSU Build"
+          fi
+
+    - name: "😋 Update KernelSU-Next + SUSFS"
+      working-directory: kernel_root
+      if: ${{ github.event.inputs.KSU_OPT == 'KernelSU-Next + SUSFS' }}
+      run: |
+          if [ -d "./KernelSU-Next" ]; then
+            rm -rf "./KernelSU-Next"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+
+          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next-susfs/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+
     - name: "Update SukiSU Ultra + SUSFS"
       working-directory: kernel_root
       if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra + SUSFS' }}
@@ -78,7 +96,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
               
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
 
     - name: Build kernel
       run: |
