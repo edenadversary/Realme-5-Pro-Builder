@@ -27,7 +27,7 @@ on:
       USE_PERSONAL:
         description: Use Personal defconfig
         type: choice
-        required: true
+        default: true
         options:
               - "godspeed_suki_defconfig"
               - "godspeed_defconfig"
