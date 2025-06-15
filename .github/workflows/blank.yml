@@ -19,7 +19,7 @@ on:
           - "None"
           - "SukiSU Ultra + SUSFS"
           - "KernelSU-Next + Next-SuSFS"
-          - "Rissu KernelSU + SUSFS"
+          - "RKSU + SUSFS"
       KSU_BRANCH:
         description: KernelSU branch
         default: 'main'
