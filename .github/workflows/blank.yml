@@ -24,10 +24,10 @@ on:
           - "KernelSU-Next"
           - "KernelSU-Next + Next-SuSFS"
           - "KernelSU by @rsuntk"
-          - "SukiSU Ultra + SUSFS"
+          - "Rissu KernelSU + SUSFS"
       KSU_BRANCH:
         description: KernelSU branch
-        default: 'susfs-main'
+        default: 'main'
         required: true
       USE_PERSONAL:
         description: Use Personal defconfig
@@ -64,21 +64,21 @@ jobs:
         git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo --single-branch
         mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/godspeed_defconfig ./arch/arm64/configs/
         gitsha1=$(git rev-parse --short HEAD)
-        buildDetails="`make kernelversion`-Godspeed_SUKISU-SUSFS_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
+        buildDetails="`make kernelversion`-Godspeed-RMX1971_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
-      - name: "😋 Update SukiSU Ultra + SUSFS"
-        working-directory: kernel_root
-        if: ${{ github.event.inputs.kernelSUChoice == 'SukiSU Ultra + SUSFS' }}
-        run: |
+    - name: "Update SukiSU Ultra + SUSFS"
+      working-directory: kernel_root
+      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra + SUSFS' }}
+      run: |
           if [ -d "./KernelSU" ]; then
             rm -rf "./KernelSU"
           fi
           if [ -d "./drivers/kernelsu" ]; then
             rm -rf "./drivers/kernelsu"
           fi
-
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main
+              
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s
 
     - name: Build kernel
       run: |
