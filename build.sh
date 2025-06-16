@@ -5,10 +5,7 @@ ZIPNAME="TLWAT-RUI2-$(date '+%Y%m%d-%H%M').zip"
 
 [ $USE_PERSONAL_DEFCONFIG = "true" ] && DEFCONFIG="godspeed_suki_defconfig"
 
-if 
-[ $PATCH_KSUN_SUSFS = "true" ]; then
-patch -p1 < ksun_157.patch
-fi
+[[ $PATCH_KSUN_SUSFS = "true" ]] && patch -p1 < ${HOME}/ksun_157.patch
 
 if test -z "$(git rev-parse --show-cdup 2>/dev/null)" &&
    head=$(git rev-parse --verify HEAD 2>/dev/null); then
