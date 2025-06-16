@@ -1,7 +1,7 @@
 export PATH="$HOME/clang/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
-ZIPNAME="GodspeedKernel-SUKISU_SUSFS_RUI2-$(date '+%Y%m%d-%H%M').zip"
+ZIPNAME="GodspeedKernel-RUI2-$(date '+%Y%m%d-%H%M').zip"
 
 [ $USE_PERSONAL_DEFCONFIG = "true" ] && DEFCONFIG="godspeed_suki_defconfig"
 
@@ -12,7 +12,7 @@ fi
 
 if ! [ -d "$HOME/clang" ]; then
 echo "- Toolchains not found! Fetching..."
-aria2c https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/llvm-r450784/clang-r437112b.tar.gz
+aria2c https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/llvm-r487747/clang-r450784d1.tar.gz
 mkdir ~/clang
 tar -xf *.tar.gz -C ~/clang
 [ ! -d "$HOME/androidcc-4.9" ] && curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s androidcc-4.9
