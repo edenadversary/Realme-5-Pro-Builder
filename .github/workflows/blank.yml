@@ -13,13 +13,12 @@ on:
       KSU_OPT:
         description: "Choose KernelSU version"
         required: true
-        default: "KernelSU"
         type: choice
         options:
           - "None"
-          - "SukiSU Ultra + SUSFS"
-          - "KernelSU-Next + Next-SuSFS"
-          - "RKSU + SUSFS"
+          - "SukiSU Ultra"
+          - "KernelSU-Next"
+          - "RKSU"
       KSU_BRANCH:
         description: KernelSU branch
         default: 'main'
@@ -71,9 +70,9 @@ jobs:
             echo "KSU Build"
           fi
           
-    - name: "Update RKSU + SUSFS"
+    - name: "Update RKSU"
       working-directory: kernel_root
-      if: ${{ github.event.inputs.KSU_OPT == 'RKSU + SUSFS' }}
+      if: ${{ github.event.inputs.KSU_OPT == 'RKSU' }}
       run: |
           if [ -d "./KernelSU" ]; then
             rm -rf "./KernelSU"
@@ -85,9 +84,9 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
 
 
-    - name: "Update KernelSU-Next + SUSFS"
+    - name: "Update KernelSU-Next"
       working-directory: kernel_root
-      if: ${{ github.event.inputs.KSU_OPT == 'KernelSU-Next + SUSFS' }}
+      if: ${{ github.event.inputs.KSU_OPT == 'KernelSU-Next' }}
       run: |
           if [ -d "./KernelSU-Next" ]; then
             rm -rf "./KernelSU-Next"
@@ -98,9 +97,9 @@ jobs:
 
           curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next-susfs/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
 
-    - name: "Update SukiSU Ultra + SUSFS"
+    - name: "Update SukiSU Ultra"
       working-directory: kernel_root
-      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra + SUSFS' }}
+      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra' }}
       run: |
           if [ -d "./KernelSU" ]; then
             rm -rf "./KernelSU"
