@@ -26,7 +26,7 @@ on:
       PATCH_KSUN:
         description: Patch SUSFS for KSUN
         default: true
-        type: boolean
+        type: string
       USE_PERSONAL:
         description: Use Personal defconfig
         type: boolean
@@ -115,15 +115,14 @@ jobs:
           curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
 
     - name: Patching SUSFS for KSUN
-      run: |
-        if [[ "${{ github.event.inputs.PATCH_KSUN }}" = "true" ]]; then
-          export PATCH_KSUN_SUSFS=true
-        else
-          export PATCH_KSUN_SUSFS=false
-        fi
-        mv ~/tmp_repo/ksun_157.patch .
-        
       working-directory: kernel_root
+      run: | 
+        if [ "${{ github.event.inputs.PATCH_KSUN }}" == "true" ]; then
+            echo "Moving Patch to kernel_root"
+            mv ~/tmp_repo/ksun_157.patch .
+          else
+            echo "No/Non-KSUN Patch!"
+          fi
 
     - name: Build kernel
       run: |
