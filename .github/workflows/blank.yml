@@ -26,7 +26,7 @@ on:
       PATCH_KSUN:
         description: Patch SUSFS for KSUN
         default: true
-        type: string
+        type: boolean
       USE_PERSONAL:
         description: Use Personal defconfig
         type: boolean
@@ -116,11 +116,13 @@ jobs:
 
     - name: Patching SUSFS for KSUN
       working-directory: kernel_root
-      run: | 
-        if [ "${{ github.event.inputs.PATCH_KSUN }}" == "true" ]; then
+      run: |
+        if [[ "${{ github.event.inputs.PATCH_KSUN }}" == "true" ]]; then
+            export PATCH_KSUN_SUSFS=true
             echo "Moving Patch to kernel_root"
             mv ~/tmp_repo/ksun_157.patch .
           else
+            export PATCH_KSUN_SUSFS=false
             echo "No/Non-KSUN Patch!"
           fi
 
