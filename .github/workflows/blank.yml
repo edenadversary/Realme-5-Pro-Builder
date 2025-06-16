@@ -99,7 +99,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
 
-          curl -LSs "https://raw.githubusercontent.com/rifsxd/KernelSU-Next/next-susfs/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
 
     - name: "Update SukiSU Ultra"
       working-directory: kernel_root
