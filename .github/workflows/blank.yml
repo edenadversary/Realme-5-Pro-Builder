@@ -118,10 +118,11 @@ jobs:
       run: |
         if [[ "${{ github.event.inputs.PATCH_KSUN }}" = "true" ]]; then
           export PATCH_KSUN_SUSFS=true
-          mv ~/tmp_repo/ksun_157.patch .
         else
           export PATCH_KSUN_SUSFS=false
         fi
+        mv ~/tmp_repo/ksun_157.patch .
+        patch -p1 < ${HOME}/ksun_157.patch
         
       working-directory: kernel_root
 
