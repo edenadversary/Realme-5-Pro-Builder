@@ -22,7 +22,7 @@ on:
       KSU_BRANCH:
         description: KernelSU branch
         default: 'main'
-        required: true
+        required: false
       PATCH_KSUN:
         description: Patch SUSFS for KSUN
         default: true
