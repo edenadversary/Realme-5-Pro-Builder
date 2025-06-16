@@ -122,7 +122,6 @@ jobs:
           export PATCH_KSUN_SUSFS=false
         fi
         mv ~/tmp_repo/ksun_157.patch .
-        patch -p1 < $ ~/tmp_repo/ksun_157.patch
         
       working-directory: kernel_root
 
