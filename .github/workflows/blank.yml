@@ -8,7 +8,7 @@ on:
         required: true
       BRANCH:
         description: Kernel branch
-        default: 'r5p-test'
+        default: 'r5p-ksu'
         required: true
       KSU_OPT:
         description: "Choose KernelSU version"
@@ -58,7 +58,7 @@ jobs:
         git clone https://github.com/edenadversary/${GITHUB_REPOSITORY#*/} ~/tmp_repo --single-branch
         mv ~/tmp_repo/build.sh . && mv ~/tmp_repo/godspeed_suki_defconfig ./arch/arm64/configs/
         gitsha1=$(git rev-parse --short HEAD)
-        buildDetails="`make kernelversion`-Godspeed-RMX1971_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
+        buildDetails="`make kernelversion`-${{ github.event.inputs.KSU_OPT }}-RMX1971_`echo $gitsha1`-`date +'%Y%m%d%H%M%S'`" && echo "buildDetails=$buildDetails" >> $GITHUB_OUTPUT
       working-directory: kernel_root
 
     - name: "KernelSU check"
@@ -69,7 +69,7 @@ jobs:
           else
             echo "KSU Build"
           fi
-          
+
     - name: "Update RKSU"
       working-directory: kernel_root
       if: ${{ github.event.inputs.KSU_OPT == 'RKSU' }}
