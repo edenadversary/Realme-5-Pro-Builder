@@ -1,7 +1,7 @@
 export PATH="$HOME/clang/bin:$PATH"
 export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
-ZIPNAME="GodspeedKernel-RUI2-$(date '+%Y%m%d-%H%M').zip"
+ZIPNAME="TLWAT-RUI2-$(date '+%Y%m%d-%H%M').zip"
 
 [ $USE_PERSONAL_DEFCONFIG = "true" ] && DEFCONFIG="godspeed_suki_defconfig"
 
@@ -46,6 +46,10 @@ OBJDUMP=llvm-objdump
 STRIP=llvm-strip
 CLANG_TRIPLE=aarch64-linux-gnu-
 "
+
+if [ $PATCH_KSUN_SUSFS = "true" ]; then
+patch -p1 < 1.5.7.patch
+fi
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 mkdir out
