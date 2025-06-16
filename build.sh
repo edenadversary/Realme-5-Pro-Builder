@@ -47,9 +47,7 @@ STRIP=llvm-strip
 CLANG_TRIPLE=aarch64-linux-gnu-
 "
 
-if [ $PATCH_KSUN_SUSFS = "true" ]; then
-patch -p1 < 1.5.7.patch
-fi
+[ $PATCH_KSUN_SUSFS = "true" ] && patch -p1 < ksun_1.5.7.patch
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
 mkdir out
