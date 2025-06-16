@@ -21,7 +21,7 @@ on:
           - "RKSU"
       KSU_BRANCH:
         description: KernelSU branch
-        default: 'main'
+        default: ''
         required: false
       PATCH_KSUN:
         description: Patch SUSFS for KSUN
