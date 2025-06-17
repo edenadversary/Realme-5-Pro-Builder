@@ -1,5 +1,3 @@
-export PATH="$HOME/clang/bin:$PATH"
-export LD_LIBRARY_PATH="$HOME/clang/lib"
 SECONDS=0
 ZIPNAME="TLWAT-RUI2-$(date '+%Y%m%d-%H%M').zip"
 
@@ -13,13 +11,16 @@ fi
 if ! [ -d "$HOME/clang" ]; then
 echo "- Toolchains not found! Fetching..."
 aria2c https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/llvm-r450784/clang-r437112b.tar.gz
-mkdir ~/clang
-tar -xf *.tar.gz -C ~/clang
-[ ! -d "$HOME/androidcc-4.9" ] && git clone https://github.com/theradcolor/aarch64-linux-gnu --depth=1 androidcc-4.9
-[ ! -d "$HOME/arm-gnu" ] && git clone https://github.com/theradcolor/arm-linux-gnueabi --depth=1 arm-gnu
-mv androidcc-4.9 ~/androidcc-4.9 && mv arm-gnu ~/arm-gnu
+mkdir $HOME/clang
+tar -xf *.tar.gz -C $HOME/clang
 rm -rf *.tar.gz
 fi
+
+[ ! -d "$HOME/gcc64" ] && git clone --depth=1 https://github.com/radcolor/aarch64-linux-gnu $HOME/gcc64
+[ ! -d "$HOME/gcc32" ] && git clone --depth=1 https://github.com/radcolor/arm-linux-gnueabi $HOME/gcc32
+
+export PATH="$HOME/clang/bin:$HOME/gcc64/bin:$HOME/gcc32/bin:$PATH"
+export LD_LIBRARY_PATH="$HOME/clang/lib"
 
 USER="Opeth"
 HOSTNAME="Perdition"
@@ -29,8 +30,8 @@ export BUILD_HOSTNAME=$HOSTNAME
 export KBUILD_BUILD_USER=$USER
 export KBUILD_BUILD_HOST=$HOSTNAME
 
-export CROSS_COMPILE="$HOME/androidcc-4.9/bin/aarch64-linux-gnu-"
-export CROSS_COMPILE_ARM32="$HOME/arm-gnu/bin/arm-linux-gnueabi-"
+export CROSS_COMPILE="aarch64-linux-gnu-"
+export CROSS_COMPILE_ARM32="arm-linux-gnueabi-"
 export CROSS_COMPILE_COMPAT=$CROSS_COMPILE_ARM32
 
 BUILD_FLAGS="
@@ -44,7 +45,7 @@ NM=llvm-nm
 OBJCOPY=llvm-objcopy
 OBJDUMP=llvm-objdump
 STRIP=llvm-strip
-CLANG_TRIPLE=aarch64-linux-gnu-
+CLANG_TRIPLE=$CROSS_COMPILE
 "
 
 if [[ $1 = "-r" || $1 = "--regen" ]]; then
