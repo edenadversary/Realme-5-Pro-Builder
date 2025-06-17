@@ -16,17 +16,9 @@ on:
         type: choice
         options:
           - "None"
-          - "SukiSU Ultra"
+          - "SukiSU Ultra + SuSFS"
           - "KernelSU-Next"
-          - "RKSU"
-      KSU_BRANCH:
-        description: KernelSU branch
-        default: ''
-        required: false
-      PATCH_KSUN:
-        description: Patch SUSFS for KSUN
-        default: true
-        type: boolean
+          - "RKSU + SuSFS"
       USE_PERSONAL:
         description: Use Personal defconfig
         type: boolean
@@ -74,9 +66,9 @@ jobs:
             echo "KSU Build"
           fi
 
-    - name: "Update RKSU"
+    - name: "Update RKSU + SuSFS"
       working-directory: kernel_root
-      if: ${{ github.event.inputs.KSU_OPT == 'RKSU' }}
+      if: ${{ github.event.inputs.KSU_OPT == 'RKSU + SuSFS' }}
       run: |
           if [ -d "./KernelSU" ]; then
             rm -rf "./KernelSU"
@@ -85,7 +77,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
 
-          curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+          curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s susfs-main
 
 
     - name: "Update KernelSU-Next"
@@ -99,11 +91,11 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
 
-          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s
 
-    - name: "Update SukiSU Ultra"
+    - name: "Update SukiSU Ultra + SuSFS"
       working-directory: kernel_root
-      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra' }}
+      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Ultra + SuSFS' }}
       run: |
           if [ -d "./KernelSU" ]; then
             rm -rf "./KernelSU"
@@ -112,19 +104,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
               
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s ${{ github.event.inputs.KSU_BRANCH }}
-
-    - name: Patching SUSFS for KSUN
-      working-directory: kernel_root
-      run: |
-        if [[ "${{ github.event.inputs.PATCH_KSUN }}" == "true" ]]; then
-            export PATCH_KSUN_SUSFS=true
-            echo "Moving Patch to kernel_root"
-            mv ~/tmp_repo/ksun_157.patch .
-          else
-            export PATCH_KSUN_SUSFS=false
-            echo "No/Non-KSUN Patch!"
-          fi
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main 
 
     - name: Build kernel
       run: |
