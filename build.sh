@@ -15,8 +15,8 @@ echo "- Toolchains not found! Fetching..."
 aria2c https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/llvm-r450784/clang-r437112b.tar.gz
 mkdir ~/clang
 tar -xf *.tar.gz -C ~/clang
-[ ! -d "$HOME/androidcc-4.9" ] && curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s androidcc-4.9
-[ ! -d "$HOME/arm-gnu" ] && curl -LSs "https://raw.githubusercontent.com/rsuntk/toolchains/refs/heads/README/clone.sh" | bash -s arm-gnu
+[ ! -d "$HOME/androidcc-4.9" ] && git clone https://github.com/theradcolor/aarch64-linux-gnu --depth=1 androidcc-4.9
+[ ! -d "$HOME/arm-gnu" ] && git clone https://github.com/theradcolor/arm-linux-gnueabi --depth=1 arm-gnu
 mv androidcc-4.9 ~/androidcc-4.9 && mv arm-gnu ~/arm-gnu
 rm -rf *.tar.gz
 fi
@@ -29,7 +29,7 @@ export BUILD_HOSTNAME=$HOSTNAME
 export KBUILD_BUILD_USER=$USER
 export KBUILD_BUILD_HOST=$HOSTNAME
 
-export CROSS_COMPILE="$HOME/androidcc-4.9/bin/aarch64-linux-android-"
+export CROSS_COMPILE="$HOME/androidcc-4.9/bin/aarch64-linux-gnu-"
 export CROSS_COMPILE_ARM32="$HOME/arm-gnu/bin/arm-linux-gnueabi-"
 export CROSS_COMPILE_COMPAT=$CROSS_COMPILE_ARM32
 
