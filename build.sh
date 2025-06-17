@@ -44,6 +44,7 @@ NM=llvm-nm
 OBJCOPY=llvm-objcopy
 OBJDUMP=llvm-objdump
 STRIP=llvm-strip
+LLVM=1
 CLANG_TRIPLE=aarch64-linux-gnu-
 "
 
