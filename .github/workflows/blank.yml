@@ -20,6 +20,7 @@ on:
           - "KernelSU-Next"
           - "RKSU + SuSFS"
           - "RKSU Non-SuSFS"
+          - "SukiSU Non-GKI"
       USE_PERSONAL:
         description: Use Personal defconfig
         type: boolean
@@ -105,6 +106,19 @@ jobs:
           fi
 
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s
+
+    - name: "Update SukiSU Non-GKI"
+      working-directory: kernel_root
+      if: ${{ github.event.inputs.KSU_OPT == 'SukiSU Non-GKI' }}
+      run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+              
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki 
 
     - name: "Update SukiSU Ultra + SuSFS"
       working-directory: kernel_root
