@@ -118,7 +118,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
               
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s nongki 
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s main 
 
     - name: "Update SukiSU Ultra + SuSFS"
       working-directory: kernel_root
