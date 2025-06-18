@@ -19,6 +19,7 @@ on:
           - "SukiSU Ultra + SuSFS"
           - "KernelSU-Next"
           - "RKSU + SuSFS"
+          - "RKSU Non-SuSFS"
       USE_PERSONAL:
         description: Use Personal defconfig
         type: boolean
@@ -66,6 +67,19 @@ jobs:
             echo "KSU Build"
           fi
 
+    - name: "Update RKSU Non-SuSFS"
+      working-directory: kernel_root
+      if: ${{ github.event.inputs.KSU_OPT == 'RKSU Non-SuSFS' }}
+      run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+
+          curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main
+ 
     - name: "Update RKSU + SuSFS"
       working-directory: kernel_root
       if: ${{ github.event.inputs.KSU_OPT == 'RKSU + SuSFS' }}
@@ -78,7 +92,6 @@ jobs:
           fi
 
           curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s susfs-main
-
 
     - name: "Update KernelSU-Next"
       working-directory: kernel_root
