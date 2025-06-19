@@ -4,7 +4,7 @@ on:
     inputs:
       REPO:
         description: Kernel Repo
-        default: 'edenadversary/rmx1971_kernel_realme'
+        default: 'edenadversary/kernel_realme_sdm710'
         required: true
       BRANCH:
         description: Kernel branch
