@@ -131,7 +131,7 @@ jobs:
             rm -rf "./drivers/kernelsu"
           fi
               
-          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-main 
+          curl -LSs "https://raw.githubusercontent.com/SukiSU-Ultra/SukiSU-Ultra/main/kernel/setup.sh" | bash -s susfs-1.5.7 
 
     - name: Build kernel
       run: |
